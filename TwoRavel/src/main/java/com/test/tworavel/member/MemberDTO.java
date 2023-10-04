@@ -8,6 +8,7 @@ public class MemberDTO {
 	private String mseq;
    private String id;
    private String pw;
+   private String pw2;
    private String mname;
    private String gender;
    private String mtel;
