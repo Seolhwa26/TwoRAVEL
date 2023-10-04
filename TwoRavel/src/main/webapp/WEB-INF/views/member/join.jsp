@@ -20,6 +20,14 @@
        border: 0;
     }
     
+    .in {
+       margin: 20px 0;
+       padding: 20px;
+       height: 50px;
+       outline: none;
+       border: 0;
+    }
+    
     input[type="radio"] {
        margin: 5px;
        margin-left: 10px;
@@ -42,7 +50,7 @@
     
     #gender {
        text-align: left;
-       margin: 0 215px;
+       margin: 0 225px;
     }
     
     form > h1 {
@@ -68,21 +76,23 @@
       <div class="border2">
           <form method="POST" action="/tworavel/member/joinok.do">
           <h1>회원가입</h1>
-          <input type="text" class="inp" name="id" id="id" placeholder="아이디 입력" required>
+          <input type="text" class="inp" name="id" id="id" placeholder="아이디 입력*" style="width: 365px;" required>
           <input type="button"  id="btnid" value="중복확인" style="width: 80px;">
           <span id="result"></span>
-          <input type="password" class="inp" name="pw" id="pw" placeholder="비밀번호 입력" required>
-          <input type="password" class="inp" name="pw2" id="pw2" placeholder="비밀번호 확인" required>
-          <input type="text" class="inp" name="mname" id="mname" placeholder="이름" required>
+          <input type="password" class="inp" name="pw" id="pw" placeholder="비밀번호 입력*" required>
+          <input type="password" class="inp" name="pw2" id="pw2" placeholder="비밀번호 확인*" required>
+          <span id="result2"></span>
+          <input type="text" class="inp" name="mname" id="mname" placeholder="이름*" required>
           <div id="gender">
-          <label><input type="radio" id="m" name="gender" value="m" checked> 남자</label>
+          <input type="text" class="in" size="2" placeholder="성별*" readonly>
+          <label style="margin: 0 20px;"><input type="radio" id="m" name="gender" value="m" checked> 남자</label>
           <label><input type="radio" id="f" name="gender" value="f"> 여자</label>
           </div>
-          <input type="text" class="inp" name="mtel" id="mtel" placeholder="연락처" required>
+          <input type="text" class="inp" name="mtel" id="mtel" placeholder="연락처*" required>
           <input type="text" class="inp" name="mptel" id="mptel" placeholder="보호자 연락처">
-          <input type="text" class="inp" name="jumin" id="jumin" placeholder="주민번호" required>
-          <input type="text" class="inp" name="maddress" id="maddress" placeholder="주소" required>
-          <input type="text" class="inp" name="email" id="email" placeholder="이메일" required>
+          <input type="text" class="inp" name="jumin" id="jumin" placeholder="주민번호*" required>
+          <input type="text" class="inp" name="maddress" id="maddress" placeholder="주소*" required>
+          <input type="text" class="inp" name="email" id="email" placeholder="이메일*" required>
           <input type="text" class="inp" name="mbti" id="mbti" placeholder="mbti">
           <input type="submit" class="button" id="ok" value="회원 가입 하기" style=" width: 185px; border: 0; display: block; margin: 20px auto;">
           </form>
@@ -167,6 +177,19 @@
                console.log(a,b,c);
             }
       });
+   });
+    
+   $('#pw2').blur(()=>{
+	  
+	   var pw = $('#pw').val();
+	   var pw2 = $('#pw2').val();
+	   
+	   if (pw != pw2) {
+           $('#result2').text('비밀번호가 서로 일치하지 않습니다.').css('color', 'tomato');
+       } else {
+    	   $('#result2').text('');
+       }
+	   
    });
 
 </script>

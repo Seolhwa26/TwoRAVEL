@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ include file = "/WEB-INF/inc/asset.jsp"%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -264,7 +265,7 @@
              <div>${dto.pend}</div>
              <div>${dto.locname}</div>
              <div>${dto.ptheme}</div>
-             <div>(${dto.co}/${dto.pmcount})</div>
+             <div>(${dto.particount}/${dto.pmcount})</div>
           </div>
           </c:forEach>
           
@@ -290,11 +291,11 @@
             <p style="font-size: 1.5rem; margin-bottom: 0; color: #212529;;">${dto2.ptheme}</p>
             <c:if test="${dto2.pconnect == 'y'}">
             <p style="font-size: 1rem; margin-bottom: 0; color: #7F7F7F;">
-               ${dto2.pmcount}명(${dto2.co} / ${dto2.pmcount}) / 인원모집중</p>
+               ${dto2.pmcount}명(${dto2.particount} / ${dto2.pmcount}) / 인원모집중</p>
             </c:if>
             <c:if test="${dto2.pconnect == 'n'}">
             <p style="font-size: 1rem; margin-bottom: 0; color: #7F7F7F;">
-               ${dto2.pmcount}명(${dto2.co} / ${dto2.pmcount}) / 인원모집완료</p>
+               ${dto2.pmcount}명(${dto2.particount} / ${dto2.pmcount}) / 인원모집완료</p>
             </c:if>
          </div>
 
@@ -304,8 +305,13 @@
          </div>
 
          <div class="jnl">
-            <input type="button" class="btn01" value="일정 참여하기"> 
-            <input type="button" class="btn01" value="일정 가져가기">
+          <c:if test="${dto2.pconnect == 'y'}">
+            <input type="button" class="btn01 part" value="일정 참여하기" onclick="location.href='/tworavel/member/participation.do?sseq=' + ${dto2.sseq};"> 
+          </c:if>
+          <c:if test="${dto2.pconnect == 'n'}">
+            <input type="button" class="btn01 part" value="일정 참여하기" style="visibility : hidden;"> 
+          </c:if>
+            <input type="button" class="btn01 take" value="일정 가져가기" onclick="location.href='/tworavel/member/getPlan.do?sseq=' + ${dto2.sseq};">
          </div>
          
          <div class="del" id="${dto2.sseq}">X</div>
@@ -315,7 +321,7 @@
       
       
 
-      <input type="button" class="button" value="회원 탈퇴" onclick="location.href='/member/unjoin.do';" style="font-size: 1.5rem; border: 0; margin-top: 20px; float: right;">
+      <input type="button" class="button" value="회원 탈퇴" onclick="location.href='/tworavel/member/unjoin.do';" style="font-size: 1.5rem; border: 0; margin-top: 20px; float: right;">
   
   </section>
   <!--================ section End =================-->
@@ -335,9 +341,11 @@
   
   $('.del').click(function() {
      
-     location.href="/tworavel/member/deljjim.do?sseq=" + event.target.id + "&no=" + ${no};
+     location.href="/tworavel/member/deljjim.do?sseq=" + event.target.id;
      
   });
+  
+ 
   
   </script>
 </body>

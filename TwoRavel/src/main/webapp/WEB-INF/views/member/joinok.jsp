@@ -29,11 +29,11 @@
             <h1 style="font-size: 25px; text-align: center; padding-top: 10px; color: #595959; font-weight: bold;"><span style="font-style: italic;">TwoRAVEL</span> 의 기능을<br>마음껏 사용해보세요!</h1>
              </div>
           </form>
-          <div id="btn1">
+          <div id="btn1" style = "text-align: center;">
            <a class="button" href="/tworavel/main/main.do">메인으로 돌아가기</a>
-           <a class="button" href="/tworavel/member/login.do" style ="margin:30px;">로그인</a>
-       </div>
+           <a class="button" href="/tworavel/member/login.do" style ="margin-left:20px; margin: 25px 0;">로그인</a>
           </div>
+       </div>
        </div>
     </div>
   </section>
