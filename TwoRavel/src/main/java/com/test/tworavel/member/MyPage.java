@@ -22,29 +22,24 @@ public class MyPage extends HttpServlet {
       HttpSession session = req.getSession();
       
       //회원번호 + 이름 얻어오기
-      String id = (String)session.getAttribute("auth");
-
+     
       MPlanDAO dao = new MPlanDAO();
       
-      String noname = dao.getName(id);
-      
-      String name = noname.substring(0, 3);
-      
-      String no = noname.substring(3);
-      
-      req.setAttribute("name", name);
+      String id = (String)session.getAttribute("auth");
+      String name = (String)session.getAttribute("name");
+      String mseq = (String)session.getAttribute("mseq");
+     
       
       //일정정보 조회
       MPlanDTO dto = new MPlanDTO();
       
-      ArrayList<MPlanDTO> list = dao.list(no);
+      ArrayList<MPlanDTO> list = dao.list(mseq);
       
       req.setAttribute("list", list);
       
-      ArrayList<MPlanDTO> list2 = dao.list2(no);
+      ArrayList<MPlanDTO> list2 = dao.list2(mseq);
       
       req.setAttribute("list2", list2);
-      req.setAttribute("no", no);
 
      
       RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/views/member/mypage.jsp");

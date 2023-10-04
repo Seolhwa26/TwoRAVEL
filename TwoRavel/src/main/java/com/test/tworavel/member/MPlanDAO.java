@@ -19,44 +19,16 @@ public class MPlanDAO {
       conn = DBUtil.open();
    }
 
-   public String getName(String id) {
-
-      try {
-         
-         String sql = "select mseq, mname from tblMember where id = ?";
-         
-         pstat = conn.prepareStatement(sql);
-         
-         pstat.setString(1, id);
-         
-         rs = pstat.executeQuery();
-         
-         if (rs.next()) {
-            String name = rs.getString("mname");
-            String mseq = rs.getString("mseq");
-            
-            String noname = name + mseq;
-            
-            return noname;
-         }
-         
-      } catch (Exception e) {
-         System.out.println("MPlanDAO.getName");
-         e.printStackTrace();
-      }
-      
-      return null;
-   }
-
-   public ArrayList<MPlanDTO> list(String no) {
+   
+   public ArrayList<MPlanDTO> list(String mseq) {
 
       try {
       
-         String sql = "select * from vwmyplan where mseq = ?";
+         String sql = "select vwmp.*, vwl.locname from vwmypageplan vwmp inner join vwloc vwl on vwmp.pseq = vwl.pseq where mseq = ?";
          
          pstat = conn.prepareStatement(sql);
          
-         pstat.setString(1, no);
+         pstat.setString(1, mseq);
          
          rs = pstat.executeQuery();
          
@@ -76,7 +48,7 @@ public class MPlanDAO {
             dto.setPend(rs.getString("pend").substring(0, 10));
             dto.setLocname(rs.getString("locname"));
             dto.setPtheme(rs.getString("ptheme"));
-            dto.setCo(rs.getString("co"));
+            dto.setParticount(rs.getString("particount"));
             dto.setPmcount(rs.getString("pmcount"));
             
             list.add(dto);
@@ -93,15 +65,16 @@ public class MPlanDAO {
       return null;
    }
 
-   public ArrayList<MPlanDTO> list2(String no) {
+   
+   public ArrayList<MPlanDTO> list2(String mseq) {
 
       try {
          
-         String sql = "select * from vwjjim where mlseq = ?";
+         String sql = "select * from vwmjjim where mseq = ?";
          
          pstat = conn.prepareStatement(sql);
          
-         pstat.setString(1, no);
+         pstat.setString(1, mseq);
          
          rs = pstat.executeQuery();
          
@@ -118,7 +91,7 @@ public class MPlanDAO {
             dto2.setPend(rs.getString("pend").substring(0, 10));
             dto2.setPtheme(rs.getString("ptheme"));
             dto2.setPconnect(rs.getString("pconnect"));
-            dto2.setCo(rs.getString("co"));
+            dto2.setParticount(rs.getString("particount"));
             dto2.setPmcount(rs.getString("pmcount"));
             dto2.setSlike(rs.getString("slike"));
             dto2.setScount(rs.getString("scount"));
@@ -136,7 +109,8 @@ public class MPlanDAO {
       return null;
    }
 
-   public int deljjim(String sseq, String no) {
+   
+   public int deljjim(String sseq, String mseq) {
 
       try {
          
@@ -144,7 +118,7 @@ public class MPlanDAO {
          
          pstat = conn.prepareStatement(sql);
          
-         pstat.setString(1, no);
+         pstat.setString(1, mseq);
          pstat.setString(2, sseq);
    
          return pstat.executeUpdate();
@@ -156,5 +130,194 @@ public class MPlanDAO {
       
       return 0;
    }
+
+   
+   public String mplanno(String sseq) {
+	   try {
+	         
+	      String sql = "select pseq from tblShare where sseq = ?";
+	         
+	      pstat = conn.prepareStatement(sql);
+	         
+	      pstat.setString(1, sseq);
+	         
+	      rs = pstat.executeQuery();
+	         
+	      if (rs.next()) {
+	         String pseq = rs.getString("pseq");
+	            
+	         return pseq;
+	      }
+	         
+	   } catch (Exception e) {
+	      System.out.println("MPlanDAO.mplanno");
+	      e.printStackTrace();
+	   }
+	      
+	   return null;
+   }
+
+   
+   public int addmplan(String npseq, String mseq) {
+	  
+	   try {
+	         
+	      String sql = "insert into tblmschedule(msseq, mseq, pseq, msauth) values ((select nvl(max(msseq), 0) + 1 from tblmschedule), ?, ?, 1)";
+	         
+	      pstat = conn.prepareStatement(sql);
+	         
+	      pstat.setString(1, mseq);
+	      pstat.setString(2, npseq);
+	   
+	      return pstat.executeUpdate();
+	         
+	   } catch (Exception e) {
+	      System.out.println("MPlanDAO.addmplan");
+	      e.printStackTrace();
+	   }
+	   return 0;
+   }
+
+   public int addmparti(String mseq, String pseq) {
+
+	   try {
+	         
+		      String sql = "insert into tblmschedule(msseq, mseq, pseq, msauth) values ((select nvl(max(msseq), 0) + 1 from tblmschedule), ?, ?, 2)";
+		         
+		      pstat = conn.prepareStatement(sql);
+		         
+		      pstat.setString(1, mseq);
+		      pstat.setString(2, pseq);
+		   
+		      return pstat.executeUpdate();
+		         
+		   } catch (Exception e) {
+		      System.out.println("MPlanDAO.addmparti");
+		      e.printStackTrace();
+		   }
+		   return 0;
+   }
+
+
+   public MPlanDTO mplanInfo(String mseq, String pseq) {
+	   try {
+	         
+	         String sql = "select * from vwmjjim where mseq = ? and pseq = ?";
+	         
+	         pstat = conn.prepareStatement(sql);
+	         
+	         pstat.setString(1, mseq);
+	         pstat.setString(2, pseq);
+	         
+	         rs = pstat.executeQuery();
+	         
+	         MPlanDTO dto = new MPlanDTO();
+	         
+	         while (rs.next()) {
+	            
+	            dto.setPmcount(rs.getString("pmcount")); 
+	            dto.setParticount(rs.getString("particount"));
+	            
+	         }
+	         
+	         return dto;
+	         
+	      } catch (Exception e) {
+	         System.out.println("MPlanDAO.mplanInfo");
+	         e.printStackTrace();
+	      }
+	      
+	      return null;
+   }
+
+
+   public int updatePlan(String pseq) {
+
+	   try {
+
+			String sql = "update tblPlan set pconnect = 'n' where pseq = ?";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, pseq);
+
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("PlanDAO.updatePlan");
+			e.printStackTrace();
+		}
+
+		return 0;
+		
+   }
+
+
+   public MPlanDTO planName(String pseq, String mseq) {
+	   
+	   try {
+	         
+	         String sql = "select vwmp.*, vwl.locname from vwmypageplan vwmp inner join vwloc vwl on vwmp.pseq = vwl.pseq where vwmp.pseq = ? and mseq = ?";
+	         
+	         pstat = conn.prepareStatement(sql);
+	         
+	         pstat.setString(1, pseq);
+	         pstat.setString(2, mseq);
+	         
+	         rs = pstat.executeQuery();
+	         
+	         MPlanDTO dto = new MPlanDTO();
+	         
+	         while (rs.next()) {
+	            
+	            dto.setPname(rs.getString("pname")); 
+	            
+	         }
+	         
+	         return dto;
+	         
+	      } catch (Exception e) {
+	         System.out.println("MPlanDAO.planName");
+	         e.printStackTrace();
+	      }
+	      
+	      return null;
+	   
+   }
+
+
+   public MPlanDTO inPlan(String pseq, String mseq) {
+	   
+	   try {
+	         
+	         String sql = "select * from tblMschedule where pseq = ? and mseq = ?";
+	         
+	         pstat = conn.prepareStatement(sql);
+	         
+	         pstat.setString(1, pseq);
+	         pstat.setString(2, mseq);
+	         
+	         rs = pstat.executeQuery();
+	         
+	         MPlanDTO dto = new MPlanDTO();
+	         
+	         while (rs.next()) {
+	            
+	            dto.setMsseq(rs.getString("msseq")); 
+	            dto.setMsauth(rs.getString("msauth"));
+	            
+	         }
+	         
+	         return dto;
+	         
+	      } catch (Exception e) {
+	         System.out.println("MPlanDAO.inPlan");
+	         e.printStackTrace();
+	      }
+	      
+	      return null;
+	      
+   }
+
    
 }
