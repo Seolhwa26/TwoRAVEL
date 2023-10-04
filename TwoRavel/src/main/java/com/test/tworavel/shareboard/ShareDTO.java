@@ -5,21 +5,18 @@ import lombok.Data;
 @Data
 public class ShareDTO {
 
-	private String pseq;
+	private String sseq;
 	private String pname;
+	private String locname;
 	private String pstart;
 	private String pend;
-	private String pshare;
-	private int pmcount;
-	private int pncount;
 	private String ptheme;
-	private String co;
-	private String scount;
+	private String pconnect;
 	private String slike;
-	private String rownum;
+	private String scount;
 	private String mbti;
-	private String local;
-	private double datecheck;
+	private String pmcount;
+	private String particount;
 	
 }
 

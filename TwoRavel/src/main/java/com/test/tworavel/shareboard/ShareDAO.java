@@ -25,14 +25,8 @@ public class ShareDAO {
 		try {
 			
 			String sql = "";
-			String where = "";
 			
-			sql = "select rownum, p.pstart - sysdate as datecheck, p.pseq as pseq, p.pname as pname, p.pstart as pstart, p.pend as pend, p.pshare as pshare, p.pmcount as pmcount, p.ptheme as ptheme, c.co as co, s.scount as scount, s.slike as slike, m.mbti as mbti, un.locname as local from tblMSchedule ms inner join tblPlan p on p.pseq = ms.pseq inner join tblMember m on ms.mseq = m.mseq inner join (select * from(select pseq,count(pseq) as co from tblMSchedule where (msauth = 1 or msauth = 2) group by pseq)) c on c.pseq = p.pseq inner join tblShare s on s.pseq = p.pseq inner join (select locname, p.pseq as pseq from (select * from tblLocal l inner join tblTrain tr on l.locseq = tr.trend inner join tblTransfer t on tr.trseq = t.trseq union all select * from tblLocal l inner join tblFlight f on l.locseq = f.fend inner join tblTransfer t on f.fseq = t.fseq union all select * from tblLocal l inner join tblBus b on l.locseq = b.bend inner join tblTransfer t on b.busseq = t.busseq) u inner join tblPlan p on u.pseq = p.pseq) un on un.pseq = p.pseq ";
-			
-			where = "where ms.msauth = 1";
-			
-			
-			sql = sql + where;
+			sql = "select sseq, pname, locname, pstart, pend, ptheme, pconnect, slike, scount, mbti, pmcount, particount from vwshareplan";
 			
 			
 			pstat = conn.prepareStatement(sql);
@@ -45,20 +39,18 @@ public class ShareDAO {
 				
 				ShareDTO dto = new ShareDTO();
 				
-				dto.setPseq(rs.getString("pseq"));
+				dto.setSseq(rs.getString("sseq"));
 				dto.setPname(rs.getString("pname"));
-				dto.setDatecheck(rs.getDouble("datecheck"));
+				dto.setLocname(rs.getString("locname"));
 				dto.setPstart(rs.getString("pstart").substring(0,10));
 				dto.setPend(rs.getString("pend").substring(0,10));
-				dto.setPshare(rs.getString("pshare"));
-				dto.setPmcount(rs.getInt("pmcount"));
 				dto.setPtheme(rs.getString("ptheme"));
-				dto.setPncount(rs.getInt("co"));
+				dto.setPconnect(rs.getString("pconnect"));
 				dto.setScount(rs.getString("scount"));
 				dto.setSlike(rs.getString("slike"));
-				dto.setRownum(rs.getString("rownum"));
 				dto.setMbti(rs.getString("mbti"));
-				dto.setLocal(rs.getString("local"));
+				dto.setPmcount(rs.getString("pmcount"));
+				dto.setParticount(rs.getString("particount"));
 				
 				list.add(dto);
 				
