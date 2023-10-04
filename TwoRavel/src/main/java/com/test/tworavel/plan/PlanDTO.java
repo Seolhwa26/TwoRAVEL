@@ -6,6 +6,7 @@ import lombok.Data;
 public class PlanDTO {
 
 	   private String pseq;
+	   private String sseq;
 	   private String pstart;
 	   private String pend;
 	   private String pname;
