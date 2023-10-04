@@ -99,7 +99,7 @@ public class PlanAdd extends HttpServlet {
 	    //설
 	      OpiDTO dto1 = new OpiDTO();
 	      
-	      String pno = "1"; //해당 회원일정번호의 일정의견 조회
+	      String pno = "7"; //해당 회원일정번호의 일정의견 조회
 	      
 	      PlanDAO dao1 = new PlanDAO();
 	      
