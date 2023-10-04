@@ -5,6 +5,9 @@ import lombok.Data;
 @Data
 public class TransferDTO {
 
+   private String tseq;
+   private String pseq;
+	
    private String busseq;
    private String bnum;
    private String bboard;

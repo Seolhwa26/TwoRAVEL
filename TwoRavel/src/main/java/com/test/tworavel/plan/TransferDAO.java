@@ -238,6 +238,61 @@ public class TransferDAO {
           }
           return null;
        }
+
+       //설
+       public TransferDTO findplan(String pseq) {
+    	   try {
+
+   		      String sql = "select * from tbltransfer where pseq = ?";
+
+   			  pstat = conn.prepareStatement(sql);
+
+   			  pstat.setString(1, pseq);
+
+   			  rs = pstat.executeQuery();
+
+   			  if (rs.next()) {
+   				  TransferDTO dto = new TransferDTO();
+
+   				  dto.setBusseq(rs.getString("busseq"));
+   				  dto.setFseq(rs.getString("fseq"));
+   				  dto.setTrseq(rs.getString("trseq"));
+
+   				  return dto;
+
+   			  }
+
+   		   } catch (Exception e) {
+   			   System.out.println("TransferDAO.findplan");
+   			   e.printStackTrace();
+   		   }
+
+   	   	   return null;
+       }
+
+
+	   public int addtransfer(String npseq, TransferDTO tdto) {
+		   
+		   try {
+
+				String sql = "insert into tblTransfer values (seqtransfer.nextVal, ?, ?, ?, ?)";
+
+				pstat = conn.prepareStatement(sql);
+
+				pstat.setString(1, npseq);
+				pstat.setString(2, tdto.getBusseq());
+				pstat.setString(3, tdto.getFseq());
+				pstat.setString(4, tdto.getTrseq());
+				
+				return pstat.executeUpdate();
+
+			} catch (Exception e) {
+				System.out.println("TransferDAO.addtransfer");
+				e.printStackTrace();
+			}
+
+			return 0;
+	   }
        
        
       
