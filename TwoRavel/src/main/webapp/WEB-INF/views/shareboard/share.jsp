@@ -55,7 +55,7 @@ p, span{
 	float: left; 
 	width: 20%;
 	font-weight: bold; 
-	font-size: 8rem;
+	font-size: 7rem;
 	text-align: center;
 	margin-top: 5px;
 }
@@ -100,9 +100,9 @@ p, span{
 
 				<c:forEach items="${list}" var="dto">
 					<div class="plan">
-						<div class="seq">${dto.rownum}</div>
+						<div class="seq">${dto.sseq}</div>
 						<div class="detail">
-							<div class=title>${dto.pname}</div> ${dto.local}
+							<div class=title>${dto.pname}</div> ${dto.locname}
 							<p>
 								<span>${dto.pstart} </span> ~ <span>${dto.pend}</span>
 							</p>
@@ -110,19 +110,15 @@ p, span{
 								<span>${dto.ptheme}</span>
 							</p>
 							<p>
-							<c:if test="${dto.datecheck>=0}">
-								<c:if test="${dto.pmcount == dto.pncount}">
-								<span>${dto.pmcount}</span>명(<span>${dto.pncount}</span> / <span>${dto.pmcount}</span>)
+								<c:if test="${dto.pconnect == 'n'}">
+								<span>${dto.pmcount}</span>명(<span>${dto.particount}</span> / <span>${dto.pmcount}</span>)
 								/ <span>인원모집종료</span>
 								</c:if>
-								<c:if test="${dto.pmcount != dto.pncount}">
-								<span>${dto.pmcount}</span>명(<span>${dto.pncount}</span> / <span>${dto.pmcount}</span>)
+								<c:if test="${dto.pconnect != 'n'}">
+								<span>${dto.pmcount}</span>명(<span>${dto.particount}</span> / <span>${dto.pmcount}</span>)
 								/ <span>인원모집중</span>
 								</c:if>
-							</c:if>
-							<c:if test="${dto.datecheck<0}">
-								<span>모집종료</span>
-							</c:if>
+							
 							</p>
 
 						</div>
@@ -135,12 +131,12 @@ p, span{
 						</div>
 						<div class="jnl">
 
-							<c:if test="${dto.datecheck>=0 && dto.pmcount > dto.pncount}">
+							<c:if test="${dto.pmcount > dto.particount}">
 							<form name="planjoin" method="GET"
 								action="/tworavel/plan/recommendok.do?">
 
 								<input type="submit" id="join" class="btn1" value="참여하기">
-								<input type="hidden" name="seq" value="${dto.pseq}">
+								<input type="hidden" name="seq" value="${dto.sseq}">
 
 							</form>
 							</c:if>
@@ -148,7 +144,7 @@ p, span{
 							<form name="planzim" method="GET" action="/tworavel/plan/zimok.do?">
 
 								<input type="submit" id="like" class="btn1" value="찜하기">
-								<input type="hidden" name="seq" value="${dto.pseq}">
+								<input type="hidden" name="sseq" value="${dto.sseq}">
 
 							</form>
 
