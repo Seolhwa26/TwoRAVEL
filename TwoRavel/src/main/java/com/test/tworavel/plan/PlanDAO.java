@@ -435,13 +435,13 @@ public class PlanDAO {
 
 		try {
 
-			String sql = "insert into tblLike values (seqLike.nextVal, (select mseq from tblMember where id = ?), (select sseq from tblPlan p inner join tblShare s on p.pseq = s.pseq where p.pseq = ?))";
+			String sql = "insert into tblLike values (seqLike.nextVal, ?, ?)";
 
 			pstat = conn.prepareStatement(sql);
 
-			pstat.setString(1, dto.getId());
-			pstat.setString(2, dto.getPseq());
-			System.out.println(dto.getId());
+			pstat.setString(1, dto.getMseq());
+			pstat.setString(2, dto.getSseq());
+			System.out.println(dto.getMseq() + "mseq, sseq" + dto.getSseq());
 
 			return pstat.executeUpdate();
 
@@ -499,6 +499,134 @@ public class PlanDAO {
 		}
 
 		return 0;
+	}
+
+	//설
+	public PlanDTO findplan(String pseq) {
+
+		try {
+
+			String sql = "select * from tblPlan where pseq=?";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, pseq);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				PlanDTO dto = new PlanDTO();
+
+				dto.setPstart(rs.getString("pstart"));
+				dto.setPend(rs.getString("pend"));
+				dto.setPname(rs.getString("pname"));
+				dto.setPtheme(rs.getString("ptheme"));
+				dto.setPconnect(rs.getString("pconnect"));
+				dto.setPmcount(rs.getInt("pmcount"));
+				dto.setPtheme(rs.getString("ptheme"));
+
+				return dto;
+
+			}
+
+		} catch (Exception e) {
+			System.out.println("PlanDAO.findplan");
+			e.printStackTrace();
+		}
+
+		return null;
+	}
+
+	//설
+	public int addplan(PlanDTO pdto) {
+		
+		try {
+
+			String sql = "insert into tblPlan (pseq, pstart, pend, pname, pshare, pconnect, pmcount, ptheme) values (seqPlan.nextVal, ?, ?, ?, 'n', ?, ?, ?)";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, pdto.getPstart().substring(0, 10));
+			pstat.setString(2, pdto.getPend().substring(0, 10));
+			pstat.setString(3, pdto.getPname());
+			if (pdto.getPmcount() == 1)  {
+				pdto.setPconnect("n");
+			}
+			System.out.println(pdto.getPconnect());
+			pstat.setString(4, pdto.getPconnect());
+			pstat.setString(5, pdto.getPmcount()+"");
+			pstat.setString(6, pdto.getPtheme());
+			
+			return pstat.executeUpdate();
+
+		} catch (Exception e) {
+			System.out.println("PlanDAO.addplan");
+			e.printStackTrace();
+		}
+
+		return 0;
+	}
+
+	//설
+	public String findnpseq() {
+
+		try {
+
+			String sql = "select seqPlan.CURRVAL FROM DUAL";
+
+			pstat = conn.prepareStatement(sql);
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+
+				String pnseq = rs.getString(1);
+						
+				return pnseq;
+			}
+
+		} catch (Exception e) {
+			System.out.println("PlanDAO.findplan");
+			e.printStackTrace();
+		}
+		
+		return null;
+	}
+
+	public String checkplan(String mseq, PlanDTO pdto) {
+		
+		try {
+
+			String sql = "select * from tblmschedule ms inner join tblPlan p on ms.pseq = p.pseq where mseq = ? and pname = ? and pmcount = ? and ptheme = ?";
+
+			pstat = conn.prepareStatement(sql);
+
+			pstat.setString(1, mseq);
+			pstat.setString(2, pdto.getPname());
+			pstat.setInt(3, pdto.getPmcount());
+			pstat.setString(4, pdto.getPtheme());
+
+			rs = pstat.executeQuery();
+
+			if (rs.next()) {
+				PlanDTO dto = new PlanDTO();
+
+				dto.setPname(rs.getString("pname"));
+				dto.setPstart(rs.getString("pstart"));
+				dto.setPend(rs.getString("pend"));
+				
+				if (dto.getPstart().equals(pdto.getPstart()) && dto.getPend().equals(pdto.getPend()))
+				return dto.getPname();
+
+			}
+
+		} catch (Exception e) {
+			System.out.println("PlanDAO.checkplan");
+			e.printStackTrace();
+		}
+
+		return null;
+		
 	}
 
 }
