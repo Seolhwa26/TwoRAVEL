@@ -3,7 +3,6 @@ package com.test.tworavel.plan;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,15 +20,17 @@ public class ZimOk extends HttpServlet {
 		
 		HttpSession session = req.getSession();
 		
-		String pseq = req.getParameter("seq");
+		String sseq = req.getParameter("sseq");
+		String mseq = (String)session.getAttribute("mseq");
 		
 		
 		int result = 0;
 		
 	    PlanDTO dto = new PlanDTO();
 	      
-		dto.setPseq(pseq);
+		dto.setSseq(sseq);
 		dto.setId((String)session.getAttribute("auth"));
+		dto.setMseq(mseq);
 
 		PlanDAO dao = new PlanDAO();
 		
@@ -40,7 +41,7 @@ public class ZimOk extends HttpServlet {
 			writer.print("<script>");
 			writer.print("alert('참여완료')");
 			writer.print("</script>");
-			resp.sendRedirect("/tworavel/main/main.do");
+			resp.sendRedirect("/tworavel/shareboard/share.do"); 
 		} else {
 			PrintWriter writer = resp.getWriter();
 			writer.print("<script>");
