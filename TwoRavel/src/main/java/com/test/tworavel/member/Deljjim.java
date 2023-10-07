@@ -29,7 +29,15 @@ public class Deljjim extends HttpServlet {
        System.out.println(result);
        if (result == 1) {
     	
-          resp.sendRedirect("/tworavel/member/mypage.do");  
+    	   req.setCharacterEncoding("UTF-8");
+		   resp.setContentType("text/html; charset=UTF-8");
+				
+		   PrintWriter writer = resp.getWriter();
+		   writer.print("<script>");
+		   writer.print("alert('찜 목록에서 삭제 되었습니다.');");
+		   writer.print("window.location.href = '/tworavel/member/mypage.do';");
+		   writer.print("</script>");
+           writer.close(); 
             
        } else {
           PrintWriter writer = resp.getWriter();
